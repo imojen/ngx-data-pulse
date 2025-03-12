@@ -13,21 +13,21 @@ npm i ngx-data-pulse
 
 ## 🚀 Fonctionnalités
 
-- API : Service complet pour gérer les appels HTTP avec gestion de l'authentification et des erreurs.
-- Storage : Service de stockage local avancé avec gestion de l'expiration et du chiffrement.
-- Modal : Service de gestion des modals.
-- Notification : Service de notification personnalisable.
-- Events : Service de gestion d'événements global avec historique.
-- Date : Service de manipulation de dates.
-- Number : Service de manipulation de nombres.
-- Pipes : Pipes pour formater des données directement dans le template (date, number, currency, etc.).
-- Network : Service de vérification de la connexion réseau.
-- Idle : Service de détection de l'inactivité de l'utilisateur.
-- SEO : Service de gestion des métadonnées SEO.
-- Navigation : Service de gestion de la navigation.
-- Loader : Service de gestion des loaders personnalisés.
-- Scroller : Service de gestion du défilement.
-- Platform : Service de gestion et détection de la plateforme.
+- [API](#-api) : Service complet pour gérer les appels HTTP avec gestion de l'authentification et des erreurs.
+- [Storage](#-storage) : Service de stockage local avancé avec gestion de l'expiration et du chiffrement.
+- [Modal](#-modal) : Service de gestion des modals.
+- [Notification](#-notification) : Service de notification personnalisable.
+- [Events](#-events) : Service de gestion d'événements global avec historique.
+- [Date](#-date) : Service de manipulation de dates.
+- [Number](#-number) : Service de manipulation de nombres.
+- [Pipes](#-pipes) : Pipes pour formater des données directement dans le template (date, number, currency, etc.).
+- [Network](#-network) : Service de vérification de la connexion réseau.
+- [Idle](#-idle) : Service de détection de l'inactivité de l'utilisateur.
+- [SEO](#-seo) : Service de gestion des métadonnées SEO.
+- [Navigation](#-navigation) : Service de gestion de la navigation.
+- [Loader](#-loader) : Service de gestion des loaders personnalisés.
+- [Scroller](#-scroller) : Service de gestion du défilement.
+- [Platform](#-platform) : Service de gestion et détection de la plateforme.
 
 ## 💻 Compatibilité
 
@@ -665,7 +665,7 @@ events.remove("USER_UPDATED");
 events.clear();
 ````
 
-## �� Service de Dates
+## 🚀 Service de Dates
 
 Le service de dates permet de manipuler facilement les dates en français.
 
