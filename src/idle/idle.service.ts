@@ -11,10 +11,13 @@ export class IdleService {
     events: ["mousemove", "keydown", "click", "scroll", "touchstart"],
     autoLogout: true,
     showWarning: true,
+    onLogout: () => (window.location.href = "/logout"),
+    actions: [],
   };
 
   private idleTimer?: number;
   private warningTimer?: number;
+  private actionTimers: number[] = [];
   private idleEvent = events.create<IdleState>({ type: "IDLE_STATUS" });
 
   readonly state = signal<IdleState>({
@@ -65,6 +68,8 @@ export class IdleService {
     if (this.warningTimer) {
       window.clearTimeout(this.warningTimer);
     }
+    this.actionTimers.forEach((timer) => window.clearTimeout(timer));
+    this.actionTimers = [];
   }
 
   /**
@@ -99,6 +104,16 @@ export class IdleService {
     if (this.warningTimer) {
       window.clearTimeout(this.warningTimer);
     }
+    this.actionTimers.forEach((timer) => window.clearTimeout(timer));
+    this.actionTimers = [];
+
+    // Configuration des actions personnalisées
+    this.config.actions?.forEach((action) => {
+      const timer = window.setTimeout(() => {
+        action.callback();
+      }, action.timeout);
+      this.actionTimers.push(timer);
+    });
 
     // Timer d'avertissement
     if (this.config.showWarning && this.config.warningDelay) {
@@ -133,7 +148,7 @@ export class IdleService {
 
       // Déconnexion automatique
       if (this.config.autoLogout) {
-        window.location.href = "/logout";
+        this.config.onLogout?.();
       }
     }, this.config.timeout);
   }

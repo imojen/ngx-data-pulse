@@ -15,13 +15,16 @@ npm i ngx-data-pulse
 
 - API : Service complet pour gérer les appels HTTP avec gestion de l'authentification et des erreurs.
 - Storage : Service de stockage local avancé avec gestion de l'expiration et du chiffrement.
+- Modal : Service de gestion des modals.
 - Notification : Service de notification personnalisable.
 - Events : Service de gestion d'événements global avec historique.
 - Date : Service de manipulation de dates.
 - Number : Service de manipulation de nombres.
+- Pipes : Pipes pour formater des données directement dans le template (date, number, currency, etc.).
 - Network : Service de vérification de la connexion réseau.
 - Idle : Service de détection de l'inactivité de l'utilisateur.
 - SEO : Service de gestion des métadonnées SEO.
+- Navigation : Service de gestion de la navigation.
 
 ## 💻 Compatibilité
 
@@ -871,13 +874,34 @@ Le service d'inactivité permet de détecter l'inactivité de l'utilisateur et d
 ```typescript
 import { idle } from "ngx-data-pulse";
 
-// Configuration (optionnelle)
+// Configuration simple
 idle.configure({
   timeout: 900000, // Délai d'inactivité (15min)
   warningDelay: 60000, // Délai d'avertissement (1min)
   events: ["mousemove", "keydown", "click", "scroll", "touchstart"],
-  autoLogout: true, // Déconnexion automatique
-  showWarning: true, // Afficher un avertissement
+  autoLogout: true,
+  showWarning: true,
+});
+
+// Configuration avec déconnexion personnalisée
+idle.configure({
+  timeout: 900000,
+  autoLogout: true,
+  onLogout: () => {
+    // Exemple avec un service d'authentification
+    authService.logout();
+
+    // Ou avec un store NgRx/Redux
+    store.dispatch(logout());
+
+    // Ou avec le router Angular
+    router.navigate(["/auth/logout"]);
+
+    // Ou une combinaison d'actions
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = "/connexion";
+  },
 });
 
 // Dans un composant
@@ -948,6 +972,45 @@ idleEvent.on((state) => {
   }
 });
 ```
+
+### Configuration
+
+| Option         | Type         | Défaut              | Description                           |
+| -------------- | ------------ | ------------------- | ------------------------------------- |
+| `timeout`      | `number`     | `900000`            | Délai d'inactivité en ms (15min)      |
+| `warningDelay` | `number`     | `60000`             | Délai d'avertissement en ms (1min)    |
+| `events`       | `string[]`   | `["mousemove",...]` | Actions à surveiller                  |
+| `autoLogout`   | `boolean`    | `true`              | Déconnexion automatique               |
+| `onLogout`     | `() => void` | `undefined`         | Fonction de déconnexion personnalisée |
+| `showWarning`  | `boolean`    | `true`              | Afficher un avertissement             |
+
+### Actions personnalisées
+
+Le service permet de définir des actions qui seront déclenchées après un délai d'inactivité spécifique :
+
+```typescript
+idle.configure({
+  timeout: 900000, // 15min
+  actions: [
+    {
+      timeout: 120000, // 2min
+      description: "Sauvegarde automatique",
+      callback: () => saveCurrentWork(),
+    },
+    {
+      timeout: 300000, // 5min
+      description: "Mode économie d'énergie",
+      callback: () => enablePowerSaveMode(),
+    },
+  ],
+});
+```
+
+Chaque action est définie par :
+
+- `timeout`: délai en ms avant déclenchement
+- `callback`: fonction à exécuter
+- `description`: description optionnelle de l'action
 
 ## 🔍 Service SEO
 
@@ -1037,5 +1100,249 @@ export class ArticleComponent implements OnInit {
   </body>
 </html>
 ```
+
+## 🎯 Service Modal
+
+Le service modal permet d'afficher des fenêtres modales personnalisables.
+
+```typescript
+import { modal } from "ngx-data-pulse";
+
+// Configuration globale
+modal.configure({
+  defaultStyles: true,
+  closeOnOverlay: true,
+  closeOnEscape: true,
+  buttons: {
+    close: "Fermer",
+    confirm: "Valider",
+    cancel: "Annuler",
+  },
+});
+
+// Dans un composant
+@Component({
+  template: `
+    <ngx-modal></ngx-modal>
+    <button (click)="showModal()">Ouvrir</button>
+  `,
+})
+export class AppComponent {
+  showModal() {
+    // Modal d'information
+    modal.info("Votre message ici", {
+      title: "Information",
+      classes: {
+        modal: "custom-modal",
+        header: "custom-header",
+      },
+    });
+
+    // Modal de confirmation
+    modal.confirm("Êtes-vous sûr ?", {
+      onConfirm: () => console.log("Confirmé"),
+      onCancel: () => console.log("Annulé"),
+    });
+
+    // Modal d'erreur
+    modal.error("Une erreur est survenue", {
+      closeOnOverlay: false,
+    });
+
+    // Modal d'alerte
+    modal.alert("Attention !", {
+      showClose: false,
+    });
+
+    // Modal personnalisée
+    modal.open({
+      type: "info",
+      title: "Titre",
+      content: "<h3>Contenu HTML</h3><p>Votre contenu ici...</p>",
+      classes: {
+        container: "modal-container",
+        overlay: "modal-overlay",
+        modal: "modal-content",
+        header: "modal-header",
+        body: "modal-body",
+        footer: "modal-footer",
+        closeButton: "modal-close",
+        actionButton: "modal-button",
+      },
+      onOpen: () => console.log("Modal ouverte"),
+      onClose: () => console.log("Modal fermée"),
+    });
+  }
+}
+```
+
+### Types de Modales
+
+- `info`: Modal d'information simple
+- `alert`: Modal d'alerte (sans fermeture par overlay)
+- `error`: Modal d'erreur (sans fermeture par overlay)
+- `confirm`: Modal de confirmation avec boutons Confirmer/Annuler
+
+### Personnalisation
+
+Chaque modal peut être personnalisée avec :
+
+- Classes CSS personnalisées
+- Callbacks (onOpen, onClose, onConfirm, onCancel)
+- Textes des boutons
+- Animations d'entrée/sortie
+- Comportement (fermeture par overlay/escape)
+- Styles par défaut activables/désactivables
+
+### Configuration des classes CSS globales
+
+Vous pouvez définir des classes CSS globales pour chaque type de modal lors de la configuration du service :
+
+```typescript
+modalService.configure({
+  classes: {
+    default: {
+      container: "modal-container",
+      overlay: "modal-overlay",
+      modal: "modal-base",
+      header: "modal-header",
+      body: "modal-body",
+      footer: "modal-footer",
+    },
+    info: {
+      modal: "modal-info",
+      actionButton: "btn-info",
+    },
+    error: {
+      modal: "modal-error",
+      actionButton: "btn-error",
+    },
+    alert: {
+      modal: "modal-alert",
+      actionButton: "btn-warning",
+    },
+    confirm: {
+      modal: "modal-confirm",
+      actionButton: "btn-primary",
+    },
+  },
+});
+```
+
+Les classes définies dans `default` s'appliquent à tous les types de modals. Les classes spécifiques à chaque type (`info`, `error`, `alert`, `confirm`) héritent et peuvent surcharger les classes par défaut.
+
+Vous pouvez toujours surcharger ces classes globales lors de l'ouverture d'une modal spécifique :
+
+```typescript
+modalService.info("Message", {
+  classes: {
+    modal: "custom-modal",
+    actionButton: "custom-button",
+  },
+});
+```
+
+## 🧭 Service de Navigation
+
+Le service de navigation permet de gérer la navigation de manière centralisée avec :
+
+- Historique de navigation
+- Redirection sécurisée après login/logout
+- Gardes de navigation
+
+```typescript
+import { navigation } from "ngx-data-pulse";
+
+// Configuration globale
+navigation.configure({
+  afterLoginUrl: "/dashboard",
+  afterLogoutUrl: "/login",
+  maxHistorySize: 50,
+  guards: [
+    {
+      canNavigate: () => !hasUnsavedChanges(),
+      message:
+        "Vous avez des modifications non sauvegardées. Voulez-vous quitter ?",
+    },
+  ],
+});
+
+// Navigation simple
+await navigation.navigate("/users");
+
+// Navigation avec garde spécifique
+await navigation.navigate("/settings", {
+  guards: [
+    {
+      canNavigate: () => isAdmin(),
+      message: "Accès réservé aux administrateurs",
+    },
+  ],
+});
+
+// Navigation forcée (ignore les gardes)
+await navigation.navigate("/logout", { force: true });
+
+// Historique
+navigation.back();
+navigation.forward();
+
+// Redirection après login
+navigation.saveRedirectUrl();
+await navigation.redirectAfterLogin();
+
+// État de la navigation
+const state = navigation.state();
+console.log(state.currentUrl);
+console.log(state.previousUrl);
+console.log(state.history);
+
+// Exemple dans un composant formulaire
+@Component({
+  template: `
+    <form (ngSubmit)="onSubmit()">
+      <input [(ngModel)]="data" name="data" />
+      <button type="submit">Enregistrer</button>
+    </form>
+  `,
+})
+export class FormComponent implements OnInit, OnDestroy {
+  private hasChanges = false;
+  private guard: NavigationGuard = {
+    canNavigate: () => !this.hasChanges,
+    message: "Formulaire non sauvegardé. Continuer ?",
+  };
+
+  ngOnInit() {
+    navigation.addGuard(this.guard);
+  }
+
+  ngOnDestroy() {
+    navigation.removeGuard(this.guard);
+  }
+
+  onSubmit() {
+    this.hasChanges = false;
+    navigation.navigate("/success");
+  }
+}
+```
+
+### Configuration
+
+| Option           | Type                | Défaut         | Description                     |
+| ---------------- | ------------------- | -------------- | ------------------------------- |
+| `afterLoginUrl`  | `string`            | `"/dashboard"` | URL de redirection après login  |
+| `afterLogoutUrl` | `string`            | `"/login"`     | URL de redirection après logout |
+| `maxHistorySize` | `number`            | `50`           | Taille max de l'historique      |
+| `guards`         | `NavigationGuard[]` | `[]`           | Gardes de navigation globaux    |
+
+### Options de Navigation
+
+| Option    | Type                | Défaut      | Description             |
+| --------- | ------------------- | ----------- | ----------------------- |
+| `guards`  | `NavigationGuard[]` | `undefined` | Gardes spécifiques      |
+| `force`   | `boolean`           | `false`     | Ignore les gardes       |
+| `replace` | `boolean`           | `false`     | Remplace l'URL actuelle |
 
 ## 📄 Licence

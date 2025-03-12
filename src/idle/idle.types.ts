@@ -1,3 +1,20 @@
+export interface IdleAction {
+  /**
+   * Délai avant déclenchement en ms
+   */
+  timeout: number;
+
+  /**
+   * Action à exécuter
+   */
+  callback: () => void;
+
+  /**
+   * Description de l'action (optionnel)
+   */
+  description?: string;
+}
+
 export interface IdleConfig {
   /**
    * Délai d'inactivité en ms avant déclenchement
@@ -24,10 +41,21 @@ export interface IdleConfig {
   autoLogout?: boolean;
 
   /**
+   * Fonction de déconnexion personnalisée
+   * Par défaut: window.location.href = "/logout"
+   */
+  onLogout?: () => void;
+
+  /**
    * Afficher un avertissement
    * @default true
    */
   showWarning?: boolean;
+
+  /**
+   * Actions personnalisées à déclencher
+   */
+  actions?: IdleAction[];
 }
 
 export interface IdleState {
