@@ -53,7 +53,7 @@ export class UsersComponent {
 
 #### Exemple Concret : Profil Utilisateur
 
-````typescript
+```typescript
 // Interface de notre modèle
 interface User {
   id: number;
@@ -63,12 +63,10 @@ interface User {
 
 // Composant de profil utilisateur
 @Component({
-  selector: 'app-user-profile',
+  selector: "app-user-profile",
   template: `
     <!-- Affichage du loader -->
-    <div *ngIf="userApi.loading()">
-      Chargement du profil...
-    </div>
+    <div *ngIf="userApi.loading()">Chargement du profil...</div>
 
     <!-- Affichage des erreurs -->
     <div *ngIf="userApi.error()" class="error">
@@ -81,7 +79,7 @@ interface User {
       <p>Email: {{ userApi.data()?.email }}</p>
       <p>ID: {{ userApi.data()?.id }}</p>
     </div>
-  `
+  `,
 })
 export class UserProfileComponent implements OnInit {
   // Création du signal API
@@ -90,12 +88,13 @@ export class UserProfileComponent implements OnInit {
   async ngOnInit() {
     try {
       // Appel API pour récupérer l'utilisateur 123
-      await this.userApi.execute('/users/123');
+      await this.userApi.execute("/users/123");
     } catch (error) {
-      console.error('Erreur lors de la récupération du profil');
+      console.error("Erreur lors de la récupération du profil");
     }
   }
 }
+```
 
 #### Méthodes HTTP disponibles
 
@@ -190,18 +189,17 @@ Chaque signal API fournit :
 - `reset()` : Réinitialisation
 - `execute()` : Exécution de la requête
 
-
 ## 🚀 Service de Stockage
 
 #### Configuration
 
 ```typescript
-import { storage } from 'ngx-data-pulse';
+import { storage } from "ngx-data-pulse";
 
 // Configuration optionnelle
 storage.configure({
-  prefix: 'app_',  // Préfixe pour les clés (défaut: 'ngx_')
-  encryptionKey: 'ma-clé-secrète'  // Active le chiffrement
+  prefix: "app_", // Préfixe pour les clés (défaut: 'ngx_')
+  encryptionKey: "ma-clé-secrète", // Active le chiffrement
 });
 ```
 
@@ -210,22 +208,22 @@ storage.configure({
 ```typescript
 // Stockage basique
 storage.put({
-  key: 'user',
-  data: { id: 1, name: 'John' }
+  key: "user",
+  data: { id: 1, name: "John" },
 });
 
 // Avec durée de vie (TTL)
 storage.put({
-  key: 'session',
-  data: { token: 'xyz' },
-  ttl: 3600  // Expire dans 1 heure
+  key: "session",
+  data: { token: "xyz" },
+  ttl: 3600, // Expire dans 1 heure
 });
 
 // Avec date d'expiration
 storage.put({
-  key: 'promo',
-  data: { code: 'SUMMER' },
-  expiresAt: new Date('2024-12-31').getTime()
+  key: "promo",
+  data: { code: "SUMMER" },
+  expiresAt: new Date("2024-12-31").getTime(),
 });
 ```
 
@@ -238,22 +236,22 @@ interface User {
 }
 
 // Récupération simple
-const user = storage.get<User>('user');
+const user = storage.get<User>("user");
 if (user) {
-  console.log(user.name);  // 'John'
+  console.log(user.name); // 'John'
 }
 
 // Vérification d'existence
-if (storage.has('session')) {
+if (storage.has("session")) {
   // La clé existe et n'est pas expirée
 }
 
 // Récupération avec métadonnées
-const item = storage.getItem<User>('user');
+const item = storage.getItem<User>("user");
 if (item) {
-  console.log(item.data.name);  // 'John'
-  console.log(new Date(item.createdAt));  // Date de création
-  console.log(new Date(item.updatedAt));  // Date de modification
+  console.log(item.data.name); // 'John'
+  console.log(new Date(item.createdAt)); // Date de création
+  console.log(new Date(item.updatedAt)); // Date de modification
 }
 ```
 
@@ -270,29 +268,27 @@ interface Product {
 const products = storage.getAll<Product>();
 
 // Recherche avec filtre
-const cheapProducts = storage.search<Product>(
-  product => product.price < 10
-);
+const cheapProducts = storage.search<Product>((product) => product.price < 10);
 ```
 
 #### Mise à jour
 
 ```typescript
 // Mise à jour des données
-storage.update('user', {
+storage.update("user", {
   id: 1,
-  name: 'John Doe'  // Nouveau nom
+  name: "John Doe", // Nouveau nom
 });
 
 // Prolonger la durée de vie
-storage.touch('session', 1800);  // +30 minutes
+storage.touch("session", 1800); // +30 minutes
 ```
 
 #### Suppression
 
 ```typescript
 // Supprimer une entrée
-storage.delete('user');
+storage.delete("user");
 
 // Supprimer toutes les entrées
 storage.reset();
@@ -305,39 +301,39 @@ interface UserProfile {
   id: number;
   name: string;
   email: string;
-  role: 'user' | 'admin';
+  role: "user" | "admin";
 }
 
 // Configuration avec chiffrement
 storage.configure({
-  prefix: 'myapp_',
-  encryptionKey: 'clé-très-secrète'
+  prefix: "myapp_",
+  encryptionKey: "clé-très-secrète",
 });
 
 // Stockage d'un profil utilisateur
 storage.put<UserProfile>({
-  key: 'profile',
+  key: "profile",
   data: {
     id: 1,
-    name: 'John Doe',
-    email: 'john@example.com',
-    role: 'admin'
+    name: "John Doe",
+    email: "john@example.com",
+    role: "admin",
   },
-  ttl: 86400  // Expire dans 24h
+  ttl: 86400, // Expire dans 24h
 });
 
 // Recherche d'administrateurs
 const admins = storage.search<UserProfile>(
-  profile => profile.role === 'admin'
+  (profile) => profile.role === "admin"
 );
 
 // Mise à jour du profil
-if (storage.has('profile')) {
-  const profile = storage.get<UserProfile>('profile');
+if (storage.has("profile")) {
+  const profile = storage.get<UserProfile>("profile");
   if (profile) {
-    storage.update('profile', {
+    storage.update("profile", {
       ...profile,
-      name: 'John Smith'
+      name: "John Smith",
     });
   }
 }
@@ -345,7 +341,6 @@ if (storage.has('profile')) {
 // Nettoyage à la déconnexion
 storage.reset();
 ```
-````
 
 ## 📖 Documentation
 
