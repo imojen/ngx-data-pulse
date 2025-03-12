@@ -702,6 +702,100 @@ date.toApiDate("01/01/2024"); // "2024-01-01T00:00:00.000Z"
 date.fromApiDate("2024-01-01T00:00:00.000Z"); // Date object
 ```
 
-## 📄 Licence
+## 🔢 Service de Nombres
 
-MIT © [Imojen]
+Le service de nombres permet de manipuler et formater facilement les nombres en français.
+
+```typescript
+import { num } from "ngx-data-pulse";
+
+// Formatage simple
+num.format(1234.5678); // "1 234,57"
+num.format(1234.5678, { decimals: 3 }); // "1 234,568"
+num.format(1234, { forceDecimals: true }); // "1 234,00"
+
+// Formatage monétaire
+num.currency(1234.56); // "1 234,56 €"
+num.currency(1234.56, { currency: "USD", symbolPosition: "before" }); // "$ 1 234,56"
+num.currency(1234.56, { symbolSpace: false }); // "1 234,56€"
+
+// Conversion de devises
+num.convert(100, { from: "EUR", to: "USD", rate: 1.1 }); // 110
+
+// Arrondis et troncature
+num.round(1234.5678, 2); // 1234.57
+num.truncate(1234.5678, 2); // 1234.56
+
+// Parsing
+num.parse("1 234,56"); // 1234.56
+num.parse("1.234,56", ","); // 1234.56
+
+// Pourcentages
+num.percentage(25, 100); // 25
+num.percentage(25, 100, 1); // 25.0
+```
+
+### Pipes Angular
+
+```typescript
+import {
+  NumberPipe,
+  CurrencyPipe,
+  PercentPipe,
+  DatePipe,
+  FromNowPipe,
+  ApiDatePipe,
+} from "ngx-data-pulse";
+
+@Component({
+  standalone: true,
+  imports: [
+    NumberPipe,
+    CurrencyPipe,
+    PercentPipe,
+    DatePipe,
+    FromNowPipe,
+    ApiDatePipe,
+  ],
+  template: `
+    <!-- Formatage de nombres -->
+    <div>{{ 1234.5678 | ngxNumber }}</div>
+    <!-- "1 234,57" -->
+    <div>{{ 1234.5678 | ngxNumber : { decimals: 3 } }}</div>
+    <!-- "1 234,568" -->
+
+    <!-- Formatage de devises -->
+    <div>{{ 1234.56 | ngxCurrency }}</div>
+    <!-- "1 234,56 €" -->
+    <div>
+      {{
+        1234.56 | ngxCurrency : { currency: "USD", symbolPosition: "before" }
+      }}
+    </div>
+    <!-- "$ 1 234,56" -->
+
+    <!-- Pourcentages -->
+    <div>{{ 25 | ngxPercent }}</div>
+    <!-- "25 %" -->
+    <div>{{ 25 | ngxPercent : 100 : 1 }}</div>
+    <!-- "25,0 %" -->
+
+    <!-- Formatage de dates -->
+    <div>{{ date | ngxDate }}</div>
+    <!-- "01/01/2024" -->
+    <div>{{ date | ngxDate : { format: "full" } }}</div>
+    <!-- "mardi 1 janvier 2024 14:30:00" -->
+
+    <!-- Temps relatif -->
+    <div>{{ date | ngxFromNow }}</div>
+    <!-- "il y a 2 mois" -->
+
+    <!-- Format API -->
+    <div>{{ date | ngxApiDate }}</div>
+    <!-- "2024-01-01T00:00:00.000Z" -->
+  `,
+})
+export class AppComponent {
+  date = new Date();
+}
+```
