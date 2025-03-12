@@ -16,6 +16,8 @@ npm i ngx-data-pulse
 - API : Service complet pour gérer les appels HTTP avec gestion de l'authentification et des erreurs.
 - Storage : Service de stockage local avancé avec gestion de l'expiration et du chiffrement.
 - Notification : Service de notification personnalisable.
+- Events : Service de gestion d'événements global avec historique.
+- Date : Service de manipulation de dates.
 
 ## 💻 Compatibilité
 
@@ -494,27 +496,154 @@ export class ReceiverComponent implements OnInit, OnDestroy {
 
 ### Gestion de l'Historique
 
+L'historique des événements permet de suivre l'évolution des données dans le temps.
+
 ```typescript
-// Accès à l'historique des événements
+// Configuration avec historique
 const userEvent = events.create<UserEvent>({
   type: "USER_UPDATED",
-  keepHistory: true,
-  historySize: 5,
+  keepHistory: true, // Active l'historique
+  historySize: 5, // Limite la taille de l'historique
+  initialData: { id: 0, name: "" }, // Données initiales
 });
 
-// Dans un composant
+// Composant avec historique
 @Component({
   template: `
-    <div>Historique des modifications :</div>
-    <ul>
-      @for (user of userEvent.history(); track user.id) {
-        <li>{{ user.name }}</li>
-      }
-    </ul>
+    <!-- Données actuelles -->
+    <div class="current">
+      Utilisateur actuel : {{ userEvent.data()?.name }}
+      <small>Mis à jour le {{ userEvent.lastEmitted() | date:'short' }}</small>
+    </div>
+
+    <!-- Historique des modifications -->
+    <div class="history">
+      <h3>Historique ({{ userEvent.history().length }} modifications)</h3>
+
+      <div class="timeline">
+        @for (user of userEvent.history(); track user.id) {
+          <div class="timeline-item">
+            <div class="name">{{ user.name }}</div>
+          </div>
+        }
+      </div>
+    </div>
   `,
+  styles: [`
+    .timeline {
+      border-left: 2px solid #ccc;
+      padding-left: 1rem;
+    }
+    .timeline-item {
+      margin: 1rem 0;
+      padding: 0.5rem;
+      border-radius: 4px;
+      background: #f5f5f5;
+    }
+  `]
 })
-export class HistoryComponent {}
+export class UserHistoryComponent {
+  userEvent = events.create<UserEvent>({
+    type: "USER_UPDATED",
+    keepHistory: true,
+    historySize: 5
+  });
+
+  // Exemple d'utilisation
+  updateUser() {
+    this.userEvent.emit({
+      id: Date.now(),
+      name: `John Doe ${new Date().toLocaleTimeString()}`
+    });
+  }
+
+  // Accès programmatique à l'historique
+  logHistory() {
+    console.log("Données actuelles:", this.userEvent.data());
+    console.log("Historique:", this.userEvent.history());
+    console.log("Dernière mise à jour:", new Date(this.userEvent.lastEmitted() || 0));
+  }
+}
 ````
+
+#### Fonctionnement de l'Historique
+
+- `keepHistory`: Active la conservation de l'historique
+- `historySize`: Nombre maximum d'entrées dans l'historique (par défaut: 10)
+- `history()`: Signal contenant le tableau des anciennes valeurs
+- `lastEmitted()`: Signal contenant le timestamp de la dernière émission
+
+#### Exemple avec Plusieurs Composants
+
+````typescript
+// Composant émetteur
+@Component({
+  template: `
+    <div class="actions">
+      <button (click)="updateName('John')">John</button>
+      <button (click)="updateName('Jane')">Jane</button>
+      <button (click)="updateName('Bob')">Bob</button>
+    </div>
+  `
+})
+export class UserEditorComponent {
+  userEvent = events.create<UserEvent>({ type: "USER_UPDATED" });
+
+  updateName(name: string) {
+    this.userEvent.emit({
+      id: Date.now(),
+      name: name
+    });
+  }
+}
+
+// Composant d'historique
+@Component({
+  template: `
+    <div class="history-widget">
+      <h4>Modifications Récentes</h4>
+      <ul class="changes">
+        @for (user of userEvent.history().slice().reverse(); track user.id) {
+          <li>
+            <span class="name">{{ user.name }}</span>
+            <span class="time">{{ getRelativeTime(user.id) }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  `,
+  styles: [`
+    .history-widget {
+      border: 1px solid #eee;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+    .changes {
+      list-style: none;
+      padding: 0;
+    }
+    .changes li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+  `]
+})
+export class UserHistoryWidgetComponent {
+  userEvent = events.create<UserEvent>({
+    type: "USER_UPDATED",
+    keepHistory: true,
+    historySize: 5
+  });
+
+  getRelativeTime(timestamp: number): string {
+    const diff = Date.now() - timestamp;
+    if (diff < 60000) return "À l'instant";
+    if (diff < 3600000) return `Il y a ${Math.floor(diff / 60000)} min`;
+    return new Date(timestamp).toLocaleTimeString();
+  }
+}
 
 ### Nettoyage
 
@@ -524,6 +653,37 @@ events.remove("USER_UPDATED");
 
 // Supprimer tous les événements
 events.clear();
+````
+
+## 📅 Service de Dates
+
+Le service de dates permet de manipuler facilement les dates en français.
+
+```typescript
+import { date } from "ngx-data-pulse";
+
+// Formatage de dates
+date.format(new Date(), { format: "short" }); // "01/01/2024"
+date.format(new Date(), { format: "medium" }); // "1 janvier 2024"
+date.format(new Date(), { format: "long" }); // "1 janvier 2024 14:30"
+date.format(new Date(), { format: "full" }); // "mardi 1 janvier 2024 14:30:00"
+
+// Calcul de différences
+date.diff("2024-01-01", "2024-02-01", { unit: "days" }); // 31
+date.diff("2024-01-01", "2025-01-01", { unit: "months" }); // 12
+
+// Temps relatif
+date.fromNow("2024-01-01"); // "il y a 2 mois"
+date.fromNow(date.add(new Date(), 1, "days")); // "dans 1 jour"
+
+// Vérifications
+date.isToday("2024-01-01"); // false
+date.isFuture("2025-01-01"); // true
+date.isPast("2023-01-01"); // true
+
+// Manipulation
+date.add("2024-01-01", 1, "months"); // 2024-02-01
+date.subtract("2024-01-01", 1, "years"); // 2023-01-01
 ```
 
 ## 📄 Licence
