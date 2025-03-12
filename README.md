@@ -432,6 +432,100 @@ export class ContactComponent {
 }
 ```
 
+## 🚀 Service d'Événements
+
+Le service d'événements permet une communication entre composants sans couplage direct, basée sur les Signals.
+
+### Configuration et Utilisation
+
+````typescript
+import { events } from "ngx-data-pulse";
+
+// Définition d'un type d'événement
+interface UserEvent {
+  id: number;
+  name: string;
+}
+
+// Création d'un événement typé
+const userEvent = events.create<UserEvent>({
+  type: "USER_UPDATED",
+  initialData: { id: 0, name: "" }, // Optionnel
+  keepHistory: true, // Optionnel
+  historySize: 5, // Optionnel
+});
+
+// Dans un composant émetteur
+@Component({
+  template: `<button (click)="updateUser()">Mettre à jour</button>`,
+})
+export class SenderComponent {
+  updateUser() {
+    userEvent.emit({
+      id: 1,
+      name: "John Doe",
+    });
+  }
+}
+
+// Dans un composant récepteur
+@Component({
+  template: `
+    <div>Utilisateur : {{ userEvent.data()?.name }}</div>
+    <div>Dernière mise à jour : {{ userEvent.lastEmitted() | date }}</div>
+  `,
+})
+export class ReceiverComponent implements OnInit, OnDestroy {
+  userEvent = events.create<UserEvent>({ type: "USER_UPDATED" });
+  private unsubscribe: () => void;
+
+  ngOnInit() {
+    // S'abonner aux changements
+    this.unsubscribe = this.userEvent.on((user) => {
+      console.log("Utilisateur mis à jour:", user);
+    });
+  }
+
+  ngOnDestroy() {
+    // Se désabonner
+    this.unsubscribe();
+  }
+}
+
+### Gestion de l'Historique
+
+```typescript
+// Accès à l'historique des événements
+const userEvent = events.create<UserEvent>({
+  type: "USER_UPDATED",
+  keepHistory: true,
+  historySize: 5,
+});
+
+// Dans un composant
+@Component({
+  template: `
+    <div>Historique des modifications :</div>
+    <ul>
+      @for (user of userEvent.history(); track user.id) {
+        <li>{{ user.name }}</li>
+      }
+    </ul>
+  `,
+})
+export class HistoryComponent {}
+````
+
+### Nettoyage
+
+```typescript
+// Supprimer un événement spécifique
+events.remove("USER_UPDATED");
+
+// Supprimer tous les événements
+events.clear();
+```
+
 ## 📄 Licence
 
 MIT © [Imojen]
