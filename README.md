@@ -735,7 +735,9 @@ num.percentage(25, 100); // 25
 num.percentage(25, 100, 1); // 25.0
 ```
 
-### Pipes Angular
+### ⭐Les Pipes NgX-Data-Pulse
+
+Les pipes sont des composants Angular qui permettent de formater des données directement dans le template.
 
 ```typescript
 import {
