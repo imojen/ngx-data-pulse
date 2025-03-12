@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/ngx-data-pulse.svg)](https://www.npmjs.com/package/ngx-data-pulse)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Bibliothèque Angular multi-fonctionnalités.
+Toolkit Angular 18+ pour tous types de projets.
 
 ## 📦 Installation
 
@@ -13,10 +13,9 @@ npm i ngx-data-pulse
 
 ## 🚀 Fonctionnalités
 
-### Services :
-
-- Service complet pour gérer les appels HTTP avec gestion de l'authentification et des erreurs.
-- Service de stockage local avancé avec gestion de l'expiration et du chiffrement.
+- API : Service complet pour gérer les appels HTTP avec gestion de l'authentification et des erreurs.
+- Storage : Service de stockage local avancé avec gestion de l'expiration et du chiffrement.
+- Notification : Service de notification personnalisable.
 
 ## 💻 Compatibilité
 
