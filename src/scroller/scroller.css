@@ -1,0 +1,100 @@
+.scroll-animated {
+  opacity: 0;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.scroll-animated.scroll-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Fade */
+@keyframes scroll-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Slide Up */
+.scroll-slide-up {
+  transform: translateY(50px);
+}
+
+@keyframes scroll-slide-up {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Slide Down */
+.scroll-slide-down {
+  transform: translateY(-50px);
+}
+
+@keyframes scroll-slide-down {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Slide Left */
+.scroll-slide-left {
+  transform: translateX(50px);
+}
+
+@keyframes scroll-slide-left {
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Slide Right */
+.scroll-slide-right {
+  transform: translateX(-50px);
+}
+
+@keyframes scroll-slide-right {
+  from {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Zoom */
+.scroll-zoom {
+  transform: scale(0.5);
+}
+
+@keyframes scroll-zoom {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

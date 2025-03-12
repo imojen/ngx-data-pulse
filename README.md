@@ -662,7 +662,7 @@ events.remove("USER_UPDATED");
 events.clear();
 ````
 
-## 📅 Service de Dates
+## �� Service de Dates
 
 Le service de dates permet de manipuler facilement les dates en français.
 
@@ -1346,3 +1346,442 @@ export class FormComponent implements OnInit, OnDestroy {
 | `replace` | `boolean`           | `false`     | Remplace l'URL actuelle |
 
 ## 📄 Licence
+
+## 📝 Service de Logs
+
+Service de logs centralisé pour le debug et la surveillance.
+
+```typescript
+import { logs } from "ngx-data-pulse";
+
+// Configuration
+logs.configure({
+  enabled: true,
+  minLevel: "warn",
+  externalServiceUrl: "https://api.sentry.io/v1",
+  apiKey: "votre-clé-api",
+  environment: "production",
+  tags: { version: "1.0.0" },
+});
+
+// Utilisation
+logs.debug("Message de debug", { data: "optionnelle" });
+logs.info("Information importante");
+logs.warn("Attention !", { détails: "..." });
+logs.error("Erreur critique", new Error("détails"));
+
+// Accès à l'historique (signal)
+const history = logs.history();
+```
+
+### Configuration
+
+| Option             | Type                                   | Défaut        | Description                                 |
+| ------------------ | -------------------------------------- | ------------- | ------------------------------------------- |
+| enabled            | boolean                                | true          | Active/désactive les logs                   |
+| minLevel           | "debug" \| "info" \| "warn" \| "error" | "debug"       | Niveau minimum des logs                     |
+| externalServiceUrl | string                                 | -             | URL du service externe (Sentry, Datadog...) |
+| apiKey             | string                                 | -             | Clé d'API du service externe                |
+| environment        | string                                 | "development" | Environnement (dev, prod...)                |
+| tags               | Record<string, string>                 | -             | Tags additionnels                           |
+
+### Fonctionnalités
+
+- 🎯 4 niveaux de logs : debug, info, warn, error
+- 📊 Historique complet accessible via signal
+- 🔄 Envoi automatique des erreurs vers Sentry/Datadog
+- 🏷️ Support des tags et métadonnées
+- 🕒 Horodatage automatique
+- 🎨 Formatage console avec couleurs
+- 🔍 Filtrage par niveau minimum
+- 💾 Conservation de l'historique
+
+### Structure d'une entrée
+
+```typescript
+interface LogEntry {
+  level: "debug" | "info" | "warn" | "error";
+  message: string;
+  data?: unknown;
+  timestamp: number;
+  tags?: Record<string, string>;
+}
+```
+
+## 🖥️ Service de Plateforme
+
+Service de détection de plateforme pour adapter l'interface utilisateur.
+
+```typescript
+import { platform } from "ngx-data-pulse";
+
+// Configuration
+platform.configure({
+  mobile: 768, // Breakpoint mobile en px
+  tablet: 1024, // Breakpoint tablette en px
+  autoUpdate: true, // Mise à jour auto sur resize
+  debounceDelay: 250, // Délai de debounce en ms
+});
+
+// Utilisation
+const info = platform.info(); // Signal avec les infos
+console.log(info.type); // mobile, tablet, desktop
+console.log(info.os); // ios, android, windows...
+console.log(info.browser); // chrome, firefox, safari...
+
+// Méthodes utilitaires
+if (platform.isMobile()) {
+  // Logique mobile
+}
+
+if (platform.isIOS()) {
+  // Logique iOS
+}
+
+if (platform.isTouchEnabled()) {
+  // Support tactile
+}
+```
+
+### Configuration
+
+| Option          | Type      | Défaut | Description         |
+| --------------- | --------- | ------ | ------------------- |
+| `mobile`        | `number`  | `768`  | Breakpoint mobile   |
+| `tablet`        | `number`  | `1024` | Breakpoint tablette |
+| `autoUpdate`    | `boolean` | `true` | Mise à jour auto    |
+| `debounceDelay` | `number`  | `250`  | Délai de debounce   |
+
+### Informations disponibles
+
+| Propriété        | Type          | Description            |
+| ---------------- | ------------- | ---------------------- |
+| `type`           | `DeviceType`  | Type d'appareil        |
+| `os`             | `OSType`      | Système d'exploitation |
+| `browser`        | `BrowserType` | Navigateur utilisé     |
+| `browserVersion` | `string`      | Version du navigateur  |
+| `screenWidth`    | `number`      | Largeur de l'écran     |
+| `screenHeight`   | `number`      | Hauteur de l'écran     |
+| `orientation`    | `string`      | Portrait ou paysage    |
+| `touchEnabled`   | `boolean`     | Support tactile        |
+| `pixelRatio`     | `number`      | Densité de pixels      |
+
+## 🔄 Service de Loader
+
+Service de chargement personnalisable avec différents types d'animations.
+
+```typescript
+import { loader } from "ngx-data-pulse";
+
+// Configuration globale
+loader.configure({
+  type: "spinner",
+  mode: "fullscreen",
+  position: "center",
+  delay: 200,
+  minDuration: 500,
+  overlay: true,
+  overlayOpacity: 0.5,
+  style: {
+    colors: {
+      primary: "#2196f3",
+      secondary: "#bbdefb",
+    },
+    size: {
+      width: "48px",
+      height: "48px",
+      thickness: "4px",
+    },
+  },
+  animation: {
+    name: "rotate",
+    duration: 1000,
+    timing: "linear",
+    iterations: Infinity,
+  },
+});
+
+// Dans un composant
+@Component({
+  template: `
+    <ngx-loader></ngx-loader>
+    <button (click)="showLoader()">Charger</button>
+  `,
+})
+export class AppComponent {
+  showLoader() {
+    // Loader simple
+    const id = loader.show();
+
+    // Loader avec texte
+    loader.show({
+      text: "Chargement en cours...",
+    });
+
+    // Loader avec barre de progression
+    loader.show({
+      type: "progress",
+      mode: "block",
+      text: "Téléchargement...",
+    });
+
+    // Loader avec points
+    loader.show({
+      type: "dots",
+      mode: "inline",
+      animation: {
+        name: "bounce",
+        duration: 500,
+      },
+    });
+
+    // Loader avec pulse
+    loader.show({
+      type: "pulse",
+      style: {
+        colors: {
+          primary: "#4caf50",
+        },
+      },
+    });
+
+    // Loader personnalisé
+    loader.show({
+      type: "custom",
+      template: "<div class='custom-loader'>...</div>",
+    });
+
+    // Cacher un loader
+    loader.hide(id);
+
+    // Cacher tous les loaders
+    loader.hideAll();
+  }
+}
+```
+
+### Types de Loaders
+
+| Type     | Description                |
+| -------- | -------------------------- |
+| spinner  | Spinner rotatif            |
+| progress | Barre de progression       |
+| dots     | Points animés              |
+| pulse    | Cercle pulsant             |
+| custom   | Template HTML personnalisé |
+
+### Modes d'affichage
+
+| Mode       | Description                |
+| ---------- | -------------------------- |
+| fullscreen | Plein écran avec overlay   |
+| block      | Bloc avec position absolue |
+| inline     | En ligne avec le contenu   |
+
+### Positions
+
+| Position | Description     |
+| -------- | --------------- |
+| center   | Centré (défaut) |
+| top      | En haut         |
+| bottom   | En bas          |
+| left     | À gauche        |
+| right    | À droite        |
+
+### Animations disponibles
+
+| Animation | Description             |
+| --------- | ----------------------- |
+| rotate    | Rotation continue       |
+| progress  | Translation horizontale |
+| bounce    | Rebond vertical         |
+| pulse     | Pulsation avec opacité  |
+
+### Styles personnalisables
+
+```typescript
+interface LoaderStyle {
+  classes?: {
+    container?: string;
+    overlay?: string;
+    loader?: string;
+    text?: string;
+  };
+  colors?: {
+    primary?: string;
+    secondary?: string;
+    background?: string;
+    text?: string;
+  };
+  size?: {
+    width?: string;
+    height?: string;
+    thickness?: string;
+  };
+}
+```
+
+### Exemple avec API
+
+```typescript
+@Component({
+  template: `
+    <div class="users" [class.loading]="loading">
+      <ngx-loader></ngx-loader>
+      <button (click)="loadUsers()">Charger</button>
+      <ul>
+        @for (user of users; track user.id) {
+        <li>{{ user.name }}</li>
+        }
+      </ul>
+    </div>
+  `,
+  styles: [
+    `
+      .users {
+        position: relative;
+        min-height: 200px;
+      }
+      .loading {
+        opacity: 0.7;
+        pointer-events: none;
+      }
+    `,
+  ],
+})
+export class UsersComponent {
+  async loadUsers() {
+    const loaderId = loader.show({
+      mode: "block",
+      text: "Chargement des utilisateurs...",
+      minDuration: 500,
+    });
+
+    try {
+      const response = await fetch("/api/users");
+      const users = await response.json();
+      this.users = users;
+    } finally {
+      loader.hide(loaderId);
+    }
+  }
+}
+```
+
+## 🌀 Service de Scroll
+
+Service de gestion du scroll et des animations avec détection de position.
+
+```typescript
+import { scroller } from "ngx-data-pulse";
+
+// Configuration globale
+scroller.configure({
+  topThreshold: 100,
+  bottomThreshold: 100,
+  behavior: "smooth",
+  debounceDelay: 100,
+  offset: { top: 0, left: 0 },
+});
+
+// Scroll vers un élément
+scroller.scrollTo("#section-1", {
+  offsetTop: -60, // Offset pour le header
+  behavior: "smooth",
+});
+
+// Verrouillage du scroll (ex: modal)
+scroller.lock();
+scroller.unlock();
+
+// Animation au scroll
+scroller.animate(element, {
+  effect: "fade",
+  threshold: 0.5,
+  duration: 500,
+  timing: "ease",
+  delay: 0,
+  once: true,
+});
+
+// Surveillance de l'état
+const scrollState = scroller.state();
+console.log(scrollState.position); // "top" | "middle" | "bottom"
+console.log(scrollState.direction); // "up" | "down" | "none"
+console.log(scrollState.progress); // 0-100
+```
+
+### Effets d'animation disponibles
+
+| Effet         | Description               |
+| ------------- | ------------------------- |
+| `fade`        | Fondu à l'apparition      |
+| `slide-up`    | Glissement vers le haut   |
+| `slide-down`  | Glissement vers le bas    |
+| `slide-left`  | Glissement vers la gauche |
+| `slide-right` | Glissement vers la droite |
+| `zoom`        | Effet de zoom             |
+
+### Configuration
+
+| Option            | Type              | Défaut                | Description                 |
+| ----------------- | ----------------- | --------------------- | --------------------------- |
+| `topThreshold`    | `number`          | `100`                 | Seuil pour détecter le haut |
+| `bottomThreshold` | `number`          | `100`                 | Seuil pour détecter le bas  |
+| `behavior`        | `ScrollBehavior`  | `"smooth"`            | Comportement du scroll      |
+| `debounceDelay`   | `number`          | `100`                 | Délai de debounce           |
+| `offset`          | `{ top?, left? }` | `{ top: 0, left: 0 }` | Offset de scroll            |
+
+### Exemple avec animations
+
+```typescript
+import { Component } from "@angular/core";
+import { scroller } from "ngx-data-pulse";
+
+@Component({
+  selector: "app-home",
+  template: `
+    <section class="hero">
+      <h1 #title>Titre</h1>
+      <p #description>Description</p>
+      <button (click)="scrollToContent()">Voir plus</button>
+    </section>
+
+    <section #content class="content">
+      <div #card1 class="card">...</div>
+      <div #card2 class="card">...</div>
+      <div #card3 class="card">...</div>
+    </section>
+  `,
+})
+export class HomeComponent {
+  ngAfterViewInit() {
+    // Animation du titre
+    scroller.animate(this.title.nativeElement, {
+      effect: "fade",
+      duration: 800,
+    });
+
+    // Animation de la description
+    scroller.animate(this.description.nativeElement, {
+      effect: "slide-up",
+      delay: 200,
+    });
+
+    // Animation des cartes
+    [this.card1, this.card2, this.card3].forEach((card, i) => {
+      scroller.animate(card.nativeElement, {
+        effect: "slide-up",
+        threshold: 0.3,
+        delay: i * 200,
+      });
+    });
+  }
+
+  scrollToContent() {
+    scroller.scrollTo(this.content.nativeElement, {
+      offsetTop: -60,
+    });
+  }
+}
+```

@@ -10,6 +10,9 @@ export * from "./idle";
 export * from "./seo";
 export * from "./modal";
 export * from "./navigation";
+export * from "./logs";
+export * from "./platform";
+export * from "./loader";
 
 /** Pipes NgX-Data-Pulse */
 export * from "./_pipes";
