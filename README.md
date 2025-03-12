@@ -151,14 +151,14 @@ await binaryApi.execute("/api/binary", {}, "arraybuffer");
 
 ```typescript
 // Configuration du token
-AuthService.setToken("votre-jwt-token");
+api.setToken("votre-jwt-token");
 
 // Les appels incluront automatiquement le token
 const privateApi = api.get<PrivateData>();
 await privateApi.execute("/api/private");
 
 // Déconnexion
-AuthService.clearToken();
+api.clearToken();
 ```
 
 #### Gestion des erreurs
@@ -342,13 +342,100 @@ if (storage.has("profile")) {
 storage.reset();
 ```
 
-## 📖 Documentation
+## Service de Notification
 
-La documentation détaillée de chaque utilitaire sera disponible prochainement.
+Le service de notification permet d'afficher des notifications personnalisables dans votre application.
 
-## 🤝 Contribution
+### Configuration
 
-Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
+```typescript
+import { NotificationService } from "@nico/utils";
+
+// Configuration globale (optionnelle)
+notificationService.configure({
+  position: "top-right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
+  duration: 5000, // durée en ms
+  maxWidth: "400px",
+  gap: "10px",
+  styles: {
+    success: {
+      background: "#4caf50",
+      color: "#fff",
+      boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+    },
+    // ... autres styles
+  },
+  icons: {
+    success: "✓",
+    error: "✕",
+    warning: "⚠",
+    info: "ℹ",
+  },
+});
+```
+
+### Utilisation
+
+```typescript
+import { NotificationService } from "@nico/utils";
+
+@Component({
+  selector: "app-root",
+  template: `
+    <ngx-notifications></ngx-notifications>
+    <button (click)="showNotification()">Afficher</button>
+  `,
+})
+export class AppComponent {
+  constructor(private notificationService: NotificationService) {}
+
+  showNotification() {
+    // Notifications prédéfinies
+    this.notificationService.success("Opération réussie !");
+    this.notificationService.error("Une erreur est survenue");
+    this.notificationService.warning("Attention");
+    this.notificationService.info("Information");
+
+    // Notification personnalisée
+    this.notificationService.show("Message", {
+      type: "success",
+      duration: 3000,
+      icon: "🚀",
+      style: {
+        background: "#000",
+        color: "#fff",
+      },
+      closable: true,
+    });
+  }
+}
+```
+
+### Exemple Concret : Formulaire de Contact
+
+```typescript
+@Component({
+  selector: "app-contact",
+  template: `
+    <form (ngSubmit)="onSubmit()">
+      <input [(ngModel)]="email" name="email" type="email" />
+      <button type="submit">Envoyer</button>
+    </form>
+  `,
+})
+export class ContactComponent {
+  constructor(private notificationService: NotificationService) {}
+
+  async onSubmit() {
+    try {
+      await this.sendEmail();
+      this.notificationService.success("Email envoyé avec succès !");
+    } catch (error) {
+      this.notificationService.error("Erreur lors de l'envoi de l'email");
+    }
+  }
+}
+```
 
 ## 📄 Licence
 
