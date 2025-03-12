@@ -25,6 +25,9 @@ npm i ngx-data-pulse
 - Idle : Service de détection de l'inactivité de l'utilisateur.
 - SEO : Service de gestion des métadonnées SEO.
 - Navigation : Service de gestion de la navigation.
+- Loader : Service de gestion des loaders personnalisés.
+- Scroller : Service de gestion du défilement.
+- Platform : Service de gestion et détection de la plateforme.
 
 ## 💻 Compatibilité
 
@@ -1344,8 +1347,6 @@ export class FormComponent implements OnInit, OnDestroy {
 | `guards`  | `NavigationGuard[]` | `undefined` | Gardes spécifiques      |
 | `force`   | `boolean`           | `false`     | Ignore les gardes       |
 | `replace` | `boolean`           | `false`     | Remplace l'URL actuelle |
-
-## 📄 Licence
 
 ## 📝 Service de Logs
 
