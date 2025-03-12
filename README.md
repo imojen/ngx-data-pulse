@@ -13,9 +13,17 @@ npm i ngx-data-pulse
 
 ## 🚀 Fonctionnalités
 
-### Service API
+### Services :
 
-Service complet pour gérer les appels HTTP avec gestion de l'authentification et des erreurs.
+- Service complet pour gérer les appels HTTP avec gestion de l'authentification et des erreurs.
+- Service de stockage local avancé avec gestion de l'expiration et du chiffrement.
+
+## 💻 Compatibilité
+
+- Angular 18+
+- TypeScript 5.4+
+
+## 🚀 Service d'API
 
 #### Utilisation Simple
 
@@ -118,7 +126,7 @@ await patchUser.execute("/users/123", {
 // DELETE
 const deleteUser = api.delete<void>();
 await deleteUser.execute("/users/123");
-````
+```
 
 #### Gestion des types de réponse
 
@@ -182,10 +190,162 @@ Chaque signal API fournit :
 - `reset()` : Réinitialisation
 - `execute()` : Exécution de la requête
 
-## 💻 Compatibilité
 
-- Angular 18+
-- TypeScript 5.4+
+## 🚀 Service de Stockage
+
+#### Configuration
+
+```typescript
+import { storage } from 'ngx-data-pulse';
+
+// Configuration optionnelle
+storage.configure({
+  prefix: 'app_',  // Préfixe pour les clés (défaut: 'ngx_')
+  encryptionKey: 'ma-clé-secrète'  // Active le chiffrement
+});
+```
+
+#### Stockage Simple
+
+```typescript
+// Stockage basique
+storage.put({
+  key: 'user',
+  data: { id: 1, name: 'John' }
+});
+
+// Avec durée de vie (TTL)
+storage.put({
+  key: 'session',
+  data: { token: 'xyz' },
+  ttl: 3600  // Expire dans 1 heure
+});
+
+// Avec date d'expiration
+storage.put({
+  key: 'promo',
+  data: { code: 'SUMMER' },
+  expiresAt: new Date('2024-12-31').getTime()
+});
+```
+
+#### Récupération
+
+```typescript
+interface User {
+  id: number;
+  name: string;
+}
+
+// Récupération simple
+const user = storage.get<User>('user');
+if (user) {
+  console.log(user.name);  // 'John'
+}
+
+// Vérification d'existence
+if (storage.has('session')) {
+  // La clé existe et n'est pas expirée
+}
+
+// Récupération avec métadonnées
+const item = storage.getItem<User>('user');
+if (item) {
+  console.log(item.data.name);  // 'John'
+  console.log(new Date(item.createdAt));  // Date de création
+  console.log(new Date(item.updatedAt));  // Date de modification
+}
+```
+
+#### Recherche et Filtrage
+
+```typescript
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+}
+
+// Récupérer tous les produits
+const products = storage.getAll<Product>();
+
+// Recherche avec filtre
+const cheapProducts = storage.search<Product>(
+  product => product.price < 10
+);
+```
+
+#### Mise à jour
+
+```typescript
+// Mise à jour des données
+storage.update('user', {
+  id: 1,
+  name: 'John Doe'  // Nouveau nom
+});
+
+// Prolonger la durée de vie
+storage.touch('session', 1800);  // +30 minutes
+```
+
+#### Suppression
+
+```typescript
+// Supprimer une entrée
+storage.delete('user');
+
+// Supprimer toutes les entrées
+storage.reset();
+```
+
+#### Exemple Complet
+
+```typescript
+interface UserProfile {
+  id: number;
+  name: string;
+  email: string;
+  role: 'user' | 'admin';
+}
+
+// Configuration avec chiffrement
+storage.configure({
+  prefix: 'myapp_',
+  encryptionKey: 'clé-très-secrète'
+});
+
+// Stockage d'un profil utilisateur
+storage.put<UserProfile>({
+  key: 'profile',
+  data: {
+    id: 1,
+    name: 'John Doe',
+    email: 'john@example.com',
+    role: 'admin'
+  },
+  ttl: 86400  // Expire dans 24h
+});
+
+// Recherche d'administrateurs
+const admins = storage.search<UserProfile>(
+  profile => profile.role === 'admin'
+);
+
+// Mise à jour du profil
+if (storage.has('profile')) {
+  const profile = storage.get<UserProfile>('profile');
+  if (profile) {
+    storage.update('profile', {
+      ...profile,
+      name: 'John Smith'
+    });
+  }
+}
+
+// Nettoyage à la déconnexion
+storage.reset();
+```
+````
 
 ## 📖 Documentation
 
