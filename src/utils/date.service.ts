@@ -251,6 +251,80 @@ export class DateService {
     return this.add(date, -amount, unit);
   }
 
+  /**
+   * Convertit une date française (DD/MM/YYYY) en format ISO
+   */
+  static frToIso(date: string): string {
+    const [day, month, year] = date.split("/");
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  }
+
+  /**
+   * Convertit une date ISO en format français (DD/MM/YYYY)
+   */
+  static isoToFr(date: string): string {
+    const [year, month, day] = date.split("-");
+    return `${day}/${month}/${year}`;
+  }
+
+  /**
+   * Convertit une date US (MM/DD/YYYY) en format français (DD/MM/YYYY)
+   */
+  static usToFr(date: string): string {
+    const [month, day, year] = date.split("/");
+    return `${day}/${month}/${year}`;
+  }
+
+  /**
+   * Convertit une date française (DD/MM/YYYY) en format US (MM/DD/YYYY)
+   */
+  static frToUs(date: string): string {
+    const [day, month, year] = date.split("/");
+    return `${month}/${day}/${year}`;
+  }
+
+  /**
+   * Convertit une date ISO en timestamp
+   */
+  static isoToTimestamp(date: string): number {
+    return new Date(date).getTime();
+  }
+
+  /**
+   * Convertit un timestamp en date ISO
+   */
+  static timestampToIso(timestamp: number): string {
+    return new Date(timestamp).toISOString().split("T")[0];
+  }
+
+  /**
+   * Convertit une date française en timestamp
+   */
+  static frToTimestamp(date: string): number {
+    return new Date(this.frToIso(date)).getTime();
+  }
+
+  /**
+   * Convertit un timestamp en date française
+   */
+  static timestampToFr(timestamp: number): string {
+    return this.format(timestamp, { format: "short" });
+  }
+
+  /**
+   * Convertit une date en format API (ISO avec timezone)
+   */
+  static toApiDate(date: string | number | Date): string {
+    return this.parse(date).toISOString();
+  }
+
+  /**
+   * Convertit une date API en format local
+   */
+  static fromApiDate(date: string): Date {
+    return new Date(date);
+  }
+
   private static formatTime(date: Date, withSeconds = false): string {
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");

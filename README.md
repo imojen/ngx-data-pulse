@@ -684,6 +684,22 @@ date.isPast("2023-01-01"); // true
 // Manipulation
 date.add("2024-01-01", 1, "months"); // 2024-02-01
 date.subtract("2024-01-01", 1, "years"); // 2023-01-01
+
+// Conversions de formats
+date.frToIso("01/01/2024"); // "2024-01-01"
+date.isoToFr("2024-01-01"); // "01/01/2024"
+date.usToFr("01/31/2024"); // "31/01/2024"
+date.frToUs("31/01/2024"); // "01/31/2024"
+
+// Conversions avec timestamps
+date.isoToTimestamp("2024-01-01"); // 1704067200000
+date.timestampToIso(1704067200000); // "2024-01-01"
+date.frToTimestamp("01/01/2024"); // 1704067200000
+date.timestampToFr(1704067200000); // "01/01/2024"
+
+// Conversions pour API
+date.toApiDate("01/01/2024"); // "2024-01-01T00:00:00.000Z"
+date.fromApiDate("2024-01-01T00:00:00.000Z"); // Date object
 ```
 
 ## 📄 Licence
