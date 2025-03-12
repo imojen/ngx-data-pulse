@@ -18,10 +18,12 @@
   "author": "Imojen",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/core": ">=18.0.0"
+    "@angular/core": ">=18.0.0",
+    "@angular/platform-browser": ">=18.0.0"
   },
   "devDependencies": {
     "@angular/core": "^18.0.0",
+    "@angular/platform-browser": "^18.0.0",
     "typescript": "~5.4.0",
     "@types/node": "^20.0.0"
   }

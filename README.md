@@ -18,6 +18,10 @@ npm i ngx-data-pulse
 - Notification : Service de notification personnalisable.
 - Events : Service de gestion d'événements global avec historique.
 - Date : Service de manipulation de dates.
+- Number : Service de manipulation de nombres.
+- Network : Service de vérification de la connexion réseau.
+- Idle : Service de détection de l'inactivité de l'utilisateur.
+- SEO : Service de gestion des métadonnées SEO.
 
 ## 💻 Compatibilité
 
@@ -735,7 +739,7 @@ num.percentage(25, 100); // 25
 num.percentage(25, 100, 1); // 25.0
 ```
 
-### ⭐Les Pipes NgX-Data-Pulse
+## ⭐Les Pipes NgX-Data-Pulse
 
 Les pipes sont des composants Angular qui permettent de formater des données directement dans le template.
 
@@ -801,3 +805,237 @@ export class AppComponent {
   date = new Date();
 }
 ```
+
+## 🌐 Service Réseau
+
+Le service réseau permet de détecter l'état de la connexion et de réagir aux changements.
+
+```typescript
+import { network } from "ngx-data-pulse";
+
+// Configuration (optionnelle)
+network.configure({
+  checkInterval: 30000, // Intervalle de vérification (30s)
+  testUrl: "https://api.example.com/health", // URL de test
+  timeout: 5000, // Timeout des requêtes (5s)
+});
+
+// Dans un composant
+@Component({
+  template: `
+    <div class="status" [class]="network.state().status">
+      {{ network.state().status === "online" ? "Connecté" : "Hors ligne" }}
+      @if (network.state().latency) {
+      <small>{{ network.state().latency }}ms</small>
+      }
+    </div>
+  `,
+  styles: [
+    `
+      .status {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .online {
+        background: #4caf50;
+        color: white;
+      }
+      .offline {
+        background: #f44336;
+        color: white;
+      }
+    `,
+  ],
+})
+export class NetworkStatusComponent {
+  network = network;
+}
+
+// Vérification manuelle
+const isOnline = await network.check();
+
+// Écoute des changements avec les événements
+const networkEvent = events.create<NetworkState>({ type: "NETWORK_STATUS" });
+networkEvent.on((state) => {
+  console.log(`Réseau ${state.status} - Latence: ${state.latency}ms`);
+});
+```
+
+## 🕒 Service d'Inactivité
+
+Le service d'inactivité permet de détecter l'inactivité de l'utilisateur et de déclencher des actions.
+
+```typescript
+import { idle } from "ngx-data-pulse";
+
+// Configuration (optionnelle)
+idle.configure({
+  timeout: 900000, // Délai d'inactivité (15min)
+  warningDelay: 60000, // Délai d'avertissement (1min)
+  events: ["mousemove", "keydown", "click", "scroll", "touchstart"],
+  autoLogout: true, // Déconnexion automatique
+  showWarning: true, // Afficher un avertissement
+});
+
+// Dans un composant
+@Component({
+  template: `
+    <div class="idle-status" [class]="getStatusClass()">
+      @if (idle.state().isWarning) {
+      <div class="warning">Déconnexion dans {{ getRemainingTime() }}s</div>
+      } @if (idle.state().isIdle) {
+      <div class="idle">Session expirée</div>
+      }
+
+      <div class="last-activity">
+        Dernière activité : {{ getLastActivity() }}
+      </div>
+    </div>
+  `,
+  styles: [
+    `
+      .idle-status {
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1rem 0;
+      }
+      .warning {
+        color: #ff9800;
+        font-weight: bold;
+      }
+      .idle {
+        color: #f44336;
+        font-weight: bold;
+      }
+      .last-activity {
+        font-size: 0.9em;
+        color: #666;
+      }
+    `,
+  ],
+})
+export class IdleStatusComponent {
+  idle = idle;
+
+  getStatusClass(): string {
+    if (this.idle.state().isIdle) return "idle";
+    if (this.idle.state().isWarning) return "warning";
+    return "active";
+  }
+
+  getRemainingTime(): number {
+    return Math.round(this.idle.state().remainingTime / 1000);
+  }
+
+  getLastActivity(): string {
+    return new Date(this.idle.state().lastActivity).toLocaleTimeString();
+  }
+}
+
+// Écoute des changements avec les événements
+const idleEvent = events.create<IdleState>({ type: "IDLE_STATUS" });
+idleEvent.on((state) => {
+  if (state.isWarning) {
+    console.log(
+      `Avertissement : déconnexion dans ${state.remainingTime / 1000}s`
+    );
+  }
+  if (state.isIdle) {
+    console.log("Session expirée");
+  }
+});
+```
+
+## 🔍 Service SEO
+
+Le service SEO permet de gérer dynamiquement les métadonnées pour le référencement.
+
+```typescript
+import { seo } from "ngx-data-pulse";
+
+// Configuration globale
+seo.configure({
+  defaultTitle: "Mon Site",
+  titleSeparator: " | ",
+  defaultDescription: "Description par défaut du site",
+  defaultImage: "https://monsite.com/image.jpg",
+  defaultLang: "fr",
+});
+
+// Dans un composant
+@Component({
+  template: `<h1>{{ title }}</h1>`,
+})
+export class ArticleComponent implements OnInit {
+  title = "Mon Article";
+
+  ngOnInit() {
+    // Mise à jour des métadonnées
+    seo.update({
+      title: this.title,
+      description: "Description détaillée de l'article",
+      image: "https://monsite.com/article.jpg",
+      type: "article",
+      keywords: ["article", "blog", "actualités"],
+      canonical: "https://monsite.com/article",
+      meta: {
+        author: "John Doe",
+        "article:published_time": "2024-01-01",
+      },
+      og: {
+        site_name: "Mon Blog",
+        locale: "fr_FR",
+      },
+      twitter: {
+        card: "summary_large_image",
+        creator: "@johndoe",
+      },
+    });
+  }
+}
+```
+
+### Résultat HTML
+
+```html
+<html lang="fr">
+  <head>
+    <title>Mon Article | Mon Site</title>
+    <meta name="description" content="Description détaillée de l'article" />
+    <meta name="keywords" content="article, blog, actualités" />
+    <meta name="author" content="John Doe" />
+    <meta name="article:published_time" content="2024-01-01" />
+
+    <link rel="canonical" href="https://monsite.com/article" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Mon Article" />
+    <meta
+      property="og:description"
+      content="Description détaillée de l'article"
+    />
+    <meta property="og:image" content="https://monsite.com/article.jpg" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Mon Blog" />
+    <meta property="og:locale" content="fr_FR" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mon Article" />
+    <meta
+      name="twitter:description"
+      content="Description détaillée de l'article"
+    />
+    <meta name="twitter:image" content="https://monsite.com/article.jpg" />
+    <meta name="twitter:creator" content="@johndoe" />
+  </head>
+  <body>
+    <h1>Mon Article</h1>
+  </body>
+</html>
+```
+
+## 📄 Licence
