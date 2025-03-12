@@ -128,7 +128,7 @@ export class NotificationComponent {
       background: notification.style?.background || "",
       color: notification.style?.color || "",
       boxShadow: notification.style?.boxShadow || "",
-      ...notification.style?.custom,
+      border: notification.style?.border || "",
     };
   }
 

@@ -342,17 +342,17 @@ if (storage.has("profile")) {
 storage.reset();
 ```
 
-## Service de Notification
+## 🚀 Service de Notification
 
 Le service de notification permet d'afficher des notifications personnalisables dans votre application.
 
 ### Configuration
 
 ```typescript
-import { NotificationService } from "@nico/utils";
+import { notif } from "ngx-data-pulse";
 
 // Configuration globale (optionnelle)
-notificationService.configure({
+notif.configure({
   position: "top-right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
   duration: 5000, // durée en ms
   maxWidth: "400px",
@@ -377,7 +377,7 @@ notificationService.configure({
 ### Utilisation
 
 ```typescript
-import { NotificationService } from "@nico/utils";
+import { notif } from "ngx-data-pulse";
 
 @Component({
   selector: "app-root",
@@ -387,17 +387,15 @@ import { NotificationService } from "@nico/utils";
   `,
 })
 export class AppComponent {
-  constructor(private notificationService: NotificationService) {}
-
   showNotification() {
     // Notifications prédéfinies
-    this.notificationService.success("Opération réussie !");
-    this.notificationService.error("Une erreur est survenue");
-    this.notificationService.warning("Attention");
-    this.notificationService.info("Information");
+    notif.success("Opération réussie !");
+    notif.error("Une erreur est survenue");
+    notif.warning("Attention");
+    notif.info("Information");
 
     // Notification personnalisée
-    this.notificationService.show("Message", {
+    notif.show("Message", {
       type: "success",
       duration: 3000,
       icon: "🚀",
@@ -424,14 +422,12 @@ export class AppComponent {
   `,
 })
 export class ContactComponent {
-  constructor(private notificationService: NotificationService) {}
-
   async onSubmit() {
     try {
       await this.sendEmail();
-      this.notificationService.success("Email envoyé avec succès !");
+      notif.success("Email envoyé avec succès !");
     } catch (error) {
-      this.notificationService.error("Erreur lors de l'envoi de l'email");
+      notif.error("Erreur lors de l'envoi de l'email");
     }
   }
 }
