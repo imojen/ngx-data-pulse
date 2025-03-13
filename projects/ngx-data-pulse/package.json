@@ -1,7 +1,7 @@
 {
   "name": "ngx-data-pulse",
-  "version": "2.2.0",
-  "description": "Bibliothèque Angular multi-fonctionnalités",
+  "version": "3.0.1",
+  "description": "Boîte à outils Angular 18+ pour vous faciliter la vie dans tous types de projets.",
   "author": "Imojen",
   "license": "MIT",
   "keywords": [
