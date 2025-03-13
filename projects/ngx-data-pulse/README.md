@@ -382,7 +382,7 @@ Le service de notification permet d'afficher des notifications personnalisables 
 ### Configuration
 
 ```typescript
-import { notif } from "ngx-data-pulse";
+import { notif, NotificationComponent } from "ngx-data-pulse";
 
 // Configuration globale (optionnelle)
 notif.configure({
@@ -410,14 +410,13 @@ notif.configure({
 ### Utilisation
 
 ```typescript
-import { notif } from "ngx-data-pulse";
+import { notif,NotificationComponent } from "ngx-data-pulse";
 
 @Component({
-  selector: "app-root",
-  template: `
-    <ngx-notifications></ngx-notifications>
-    <button (click)="showNotification()">Afficher</button>
-  `,
+  ...
+  imports: [NotificationComponent],
+  template: `<ngx-notifications></ngx-notifications>`,
+  ...
 })
 export class AppComponent {
   showNotification() {
@@ -1131,7 +1130,7 @@ export class ArticleComponent implements OnInit {
 Le service modal permet d'afficher des fenêtres modales personnalisables.
 
 ```typescript
-import { modal } from "ngx-data-pulse";
+import { modal,ModalComponent } from "ngx-data-pulse";
 
 // Configuration globale
 modal.configure({
@@ -1147,6 +1146,8 @@ modal.configure({
 
 // Dans un composant
 @Component({
+  ...
+  imports: [ModalComponent],
   template: `
     <ngx-modal></ngx-modal>
     <button (click)="showModal()">Ouvrir</button>

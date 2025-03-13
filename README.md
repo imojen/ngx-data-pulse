@@ -14,16 +14,23 @@ Boîte à outils Angular 18+ pour vous faciliter la vie dans tous types de proje
 npm i ngx-data-pulse
 ```
 
+## Initialisation de la bibliothèque
+
+Pour utiliser ngx-data-pulse, vous devez initialiser la bibliothèque dans votre application Angular.
+
+### Dans un projet Angular standalone
+
+Dans votre fichier `main.ts` :
+
 ```typescript
-// main.ts
+import { bootstrapApplication } from "@angular/platform-browser";
+import { appConfig } from "./app/app.config";
+import { AppComponent } from "./app/app.component";
 import { provideNgxDataPulse } from "ngx-data-pulse";
 
 bootstrapApplication(AppComponent, {
-  providers: [
-    // ... autres providers
-    provideNgxDataPulse(),
-  ],
-});
+  providers: [...appConfig.providers, provideNgxDataPulse()],
+}).catch((err) => console.error(err));
 ```
 
 ## 💻 Compatibilité
@@ -375,7 +382,7 @@ Le service de notification permet d'afficher des notifications personnalisables 
 ### Configuration
 
 ```typescript
-import { notif } from "ngx-data-pulse";
+import { notif, NotificationComponent } from "ngx-data-pulse";
 
 // Configuration globale (optionnelle)
 notif.configure({
@@ -403,14 +410,13 @@ notif.configure({
 ### Utilisation
 
 ```typescript
-import { notif } from "ngx-data-pulse";
+import { notif,NotificationComponent } from "ngx-data-pulse";
 
 @Component({
-  selector: "app-root",
-  template: `
-    <ngx-notifications></ngx-notifications>
-    <button (click)="showNotification()">Afficher</button>
-  `,
+  ...
+  imports: [NotificationComponent],
+  template: `<ngx-notifications></ngx-notifications>`,
+  ...
 })
 export class AppComponent {
   showNotification() {
@@ -1124,7 +1130,7 @@ export class ArticleComponent implements OnInit {
 Le service modal permet d'afficher des fenêtres modales personnalisables.
 
 ```typescript
-import { modal } from "ngx-data-pulse";
+import { modal,ModalComponent } from "ngx-data-pulse";
 
 // Configuration globale
 modal.configure({
@@ -1140,6 +1146,8 @@ modal.configure({
 
 // Dans un composant
 @Component({
+  ...
+  imports: [ModalComponent],
   template: `
     <ngx-modal></ngx-modal>
     <button (click)="showModal()">Ouvrir</button>

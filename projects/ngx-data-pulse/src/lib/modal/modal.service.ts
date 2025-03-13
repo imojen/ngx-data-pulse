@@ -134,7 +134,7 @@ export class ModalService {
   /**
    * Ouvre une modal de confirmation
    */
-  showConfirm(content: string, config?: Partial<ModalConfig>): void {
+  confirm(content: string, config?: Partial<ModalConfig>): void {
     this.open({
       ...config,
       type: "confirm",
@@ -189,5 +189,9 @@ export class ModalService {
     const config = this.state().config;
     this.close();
     config?.onCancel?.();
+  }
+
+  public showConfirm(): void {
+    this.confirm();
   }
 }

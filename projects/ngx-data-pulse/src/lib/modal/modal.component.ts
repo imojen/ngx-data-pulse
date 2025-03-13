@@ -95,114 +95,100 @@ import { ModalService } from "./modal.service";
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(4px);
       }
 
       .modal-content {
         position: relative;
-        width: 100%;
+        width: 90%;
         max-width: 500px;
         max-height: 90vh;
         overflow-y: auto;
-        background: #fff;
-        border-radius: 4px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        animation: fade-in 0.3s ease-in-out;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        transform: scale(0.95);
+        opacity: 0;
+        animation: modalFadeIn 0.3s ease forwards;
       }
 
       .modal-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1rem;
-        border-bottom: 1px solid #eee;
+        margin-bottom: 0;
       }
 
       .modal-header h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2d3748;
         margin: 0;
-        font-size: 1.25rem;
       }
 
       .modal-close {
-        background: none;
+        background: transparent;
         border: none;
+        color: #718096;
         font-size: 1.5rem;
         cursor: pointer;
         padding: 0.5rem;
-        margin: -0.5rem;
-        opacity: 0.5;
-        transition: opacity 0.2s;
-      }
-
-      .modal-close:hover {
+        transition: color 0.2s;
         opacity: 1;
       }
 
+      .modal-close:hover {
+        color: #2d3748;
+      }
+
       .modal-body {
-        padding: 1rem;
+        padding: 1rem 0;
+        color: #4a5568;
+        line-height: 1.6;
       }
 
       .modal-footer {
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 0.5rem;
-        padding: 1rem;
-        border-top: 1px solid #eee;
+        gap: 1rem;
+        padding: 1.5rem 0 0 0;
+        border: none;
       }
 
       .modal-button {
-        padding: 0.5rem 1rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        background: #fff;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
         cursor: pointer;
         transition: all 0.2s;
       }
 
-      .modal-button:hover {
-        background: #f5f5f5;
-      }
-
       .modal-button.confirm {
-        background: #4caf50;
-        border-color: #4caf50;
-        color: #fff;
+        background: #4f46e5;
+        color: white;
       }
 
       .modal-button.confirm:hover {
-        background: #43a047;
+        background: #4338ca;
       }
 
       .modal-button.cancel {
-        background: #f44336;
-        border-color: #f44336;
-        color: #fff;
+        background: #ef4444;
+        color: white;
       }
 
       .modal-button.cancel:hover {
-        background: #e53935;
+        background: #dc2626;
       }
 
-      @keyframes fade-in {
-        from {
-          opacity: 0;
-          transform: translateY(-20px);
-        }
+      @keyframes modalFadeIn {
         to {
+          transform: scale(1);
           opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes fade-out {
-        from {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        to {
-          opacity: 0;
-          transform: translateY(-20px);
         }
       }
     `,
