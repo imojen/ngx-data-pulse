@@ -1,8 +1,10 @@
-# 🌠 NgxDataPulse
+# 🌠 NgxDataPulse 🌠
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Boîte à outils Angular 18+ pour vous faciliter la vie dans tous types de projets.
+
+⚠️ Package en cours de développement, les fonctionnalités sont susceptibles d'évoluer.
 
 ## 📦 Installation
 
