@@ -4,6 +4,45 @@
 
 Boîte à outils Angular 18+ pour vous faciliter la vie dans tous types de projets.
 
+## 🔧 Installation et Configuration
+
+### Installation via NPM
+
+```bash
+npm i ngx-data-pulse
+```
+
+### Configuration dans votre projet
+
+#### Pour Angular 16+ (Style moderne avec providers)
+
+```typescript
+// main.ts
+import { provideNgxDataPulse } from "ngx-data-pulse";
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    // ... autres providers
+    provideNgxDataPulse(),
+  ],
+});
+```
+
+#### Pour Angular 15 et versions antérieures (Style avec modules)
+
+```typescript
+// app.module.ts
+import { NgxDataPulseModule } from "ngx-data-pulse";
+
+@NgModule({
+  imports: [
+    // ... autres modules
+    NgxDataPulseModule,
+  ],
+})
+export class AppModule {}
+```
+
 ⚠️ Package en cours de développement, les fonctionnalités sont susceptibles d'évoluer.
 
 ## 📦 Installation
