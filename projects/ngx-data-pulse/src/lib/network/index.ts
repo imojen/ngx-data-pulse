@@ -1,5 +1,12 @@
 export * from "./network.types";
 export * from "./network.service";
 
+import { inject } from "@angular/core";
 import { NetworkService } from "./network.service";
-export const network = new NetworkService();
+
+// Fonction d'aide pour injecter le service
+export function injectNetworkService(): NetworkService {
+  return inject(NetworkService);
+}
+
+export default injectNetworkService;

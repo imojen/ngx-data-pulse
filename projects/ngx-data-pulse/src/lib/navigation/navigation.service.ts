@@ -1,13 +1,13 @@
-import { Injectable, inject, signal } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
 import { Location } from "@angular/common";
 import { Router, Event, NavigationEnd } from "@angular/router";
-import { modal } from "../modal";
 import {
   NavigationConfig,
   NavigationGuard,
   NavigationOptions,
   NavigationState,
 } from "./navigation.types";
+import { ModalService } from "../modal/modal.service";
 
 @Injectable({ providedIn: "root" })
 export class NavigationService {
@@ -18,15 +18,16 @@ export class NavigationService {
     guards: [],
   };
 
-  private router = inject(Router);
-  private location = inject(Location);
-
   readonly state = signal<NavigationState>({
     currentUrl: "/",
     history: [],
   });
 
-  constructor() {
+  constructor(
+    private router: Router,
+    private location: Location,
+    private modalService: ModalService
+  ) {
     // Écoute des changements de route
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
@@ -157,10 +158,8 @@ export class NavigationService {
       if (!canNavigate) {
         if (guard.message) {
           await new Promise<void>((resolve) => {
-            modal.open({
-              type: "confirm",
+            this.modalService.showConfirm(guard.message!, {
               title: "Navigation bloquée",
-              content: guard.message!,
               onConfirm: () => resolve(),
               onCancel: () => resolve(),
             });

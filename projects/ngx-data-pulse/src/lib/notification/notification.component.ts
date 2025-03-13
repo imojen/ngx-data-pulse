@@ -118,10 +118,13 @@ import { NotificationItem } from "./notification.types";
   ],
 })
 export class NotificationComponent {
-  private notificationService = inject(NotificationService);
+  notifications: any;
+  config: any;
 
-  notifications = this.notificationService.getNotifications();
-  config = computed(() => this.notificationService.getConfig());
+  constructor(private notificationService: NotificationService) {
+    this.notifications = this.notificationService.getNotifications();
+    this.config = computed(() => this.notificationService.getConfig());
+  }
 
   getStyles(notification: NotificationItem): Record<string, string> {
     return {

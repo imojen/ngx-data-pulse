@@ -209,10 +209,13 @@ import { ModalService } from "./modal.service";
   ],
 })
 export class ModalComponent {
-  private modalService = inject(ModalService);
+  protected isOpen: any;
+  protected config: any;
 
-  protected isOpen = computed(() => this.modalService.state().isOpen);
-  protected config = computed(() => this.modalService.state().config);
+  constructor(private modalService: ModalService) {
+    this.isOpen = computed(() => this.modalService.state().isOpen);
+    this.config = computed(() => this.modalService.state().config);
+  }
 
   protected onOverlayClick(): void {
     if (this.config()?.closeOnOverlay) {

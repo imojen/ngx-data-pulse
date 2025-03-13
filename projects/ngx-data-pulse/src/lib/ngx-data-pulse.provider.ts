@@ -1,7 +1,22 @@
-import { EnvironmentProviders, makeEnvironmentProviders } from "@angular/core";
+import {
+  APP_INITIALIZER,
+  EnvironmentProviders,
+  Injector,
+  makeEnvironmentProviders,
+} from "@angular/core";
+import { injector as globalInjector } from "./shared/injector";
 
 export function provideNgxDataPulse(): EnvironmentProviders {
   return makeEnvironmentProviders([
-    // Ajoutez ici vos providers si nécessaire
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (injector: Injector) => {
+        return () => {
+          globalInjector.set(injector);
+        };
+      },
+      deps: [Injector],
+      multi: true,
+    },
   ]);
 }

@@ -1,6 +1,6 @@
 import { Injectable, signal } from "@angular/core";
 import { NetworkConfig, NetworkState, NetworkStatus } from "./network.types";
-import { events } from "../events";
+import eventsService from "../events";
 
 @Injectable({ providedIn: "root" })
 export class NetworkService {
@@ -11,7 +11,7 @@ export class NetworkService {
   };
 
   private checkTimer?: number;
-  private networkEvent = events.create<NetworkState>({
+  private networkEvent = eventsService().create<NetworkState>({
     type: "NETWORK_STATUS",
   });
 

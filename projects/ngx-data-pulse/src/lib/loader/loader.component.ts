@@ -208,8 +208,11 @@ import { LoaderInstance, LoaderType } from "./loader.types";
   ],
 })
 export class LoaderComponent {
-  private loaderService = inject(LoaderService);
-  protected loaders = this.loaderService.state;
+  protected loaders: any;
+
+  constructor(private loaderService: LoaderService) {
+    this.loaders = this.loaderService.state;
+  }
 
   protected getContainerClasses(loader: LoaderInstance): string {
     const classes: string[] = [];

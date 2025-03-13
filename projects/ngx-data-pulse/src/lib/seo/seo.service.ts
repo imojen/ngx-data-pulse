@@ -1,4 +1,4 @@
-import { Injectable, inject } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Meta, Title } from "@angular/platform-browser";
 import { SeoConfig, SeoData } from "./seo.types";
 
@@ -12,8 +12,7 @@ export class SeoService {
     defaultLang: "fr",
   };
 
-  private title: Title = inject(Title);
-  private meta: Meta = inject(Meta);
+  constructor(private title: Title, private meta: Meta) {}
 
   /**
    * Configure le service

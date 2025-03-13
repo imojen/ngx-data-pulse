@@ -14,16 +14,23 @@ Boîte à outils Angular 18+ pour vous faciliter la vie dans tous types de proje
 npm i ngx-data-pulse
 ```
 
+## Initialisation de la bibliothèque
+
+Pour utiliser ngx-data-pulse, vous devez initialiser la bibliothèque dans votre application Angular.
+
+### Dans un projet Angular standalone
+
+Dans votre fichier `main.ts` :
+
 ```typescript
-// main.ts
+import { bootstrapApplication } from "@angular/platform-browser";
+import { appConfig } from "./app/app.config";
+import { AppComponent } from "./app/app.component";
 import { provideNgxDataPulse } from "ngx-data-pulse";
 
 bootstrapApplication(AppComponent, {
-  providers: [
-    // ... autres providers
-    provideNgxDataPulse(),
-  ],
-});
+  providers: [...appConfig.providers, provideNgxDataPulse()],
+}).catch((err) => console.error(err));
 ```
 
 ## 💻 Compatibilité

@@ -1,7 +1,7 @@
 import { Injectable, signal } from "@angular/core";
 import { IdleConfig, IdleState } from "./idle.types";
-import { events } from "../events";
-import { notif } from "../notification";
+import eventsService from "../events";
+import { NotificationService } from "../notification/notification.service";
 
 @Injectable({ providedIn: "root" })
 export class IdleService {
@@ -18,7 +18,9 @@ export class IdleService {
   private idleTimer?: number;
   private warningTimer?: number;
   private actionTimers: number[] = [];
-  private idleEvent = events.create<IdleState>({ type: "IDLE_STATUS" });
+  private idleEvent = eventsService().create<IdleState>({
+    type: "IDLE_STATUS",
+  });
 
   readonly state = signal<IdleState>({
     isIdle: false,
@@ -27,7 +29,7 @@ export class IdleService {
     lastActivity: Date.now(),
   });
 
-  constructor() {
+  constructor(private notificationService: NotificationService) {
     this.start();
   }
 
@@ -129,7 +131,7 @@ export class IdleService {
         this.idleEvent.emit(this.state());
 
         // Affichage de l'avertissement
-        notif.warning(
+        this.notificationService.warning(
           `Déconnexion dans ${Math.round(this.config.warningDelay! / 1000)}s...`
         );
       }, warningTime);
