@@ -1,40 +1,11 @@
 {
-  "name": "ngx-data-pulse",
+  "name": "ngx-data-pulse-workspace",
   "version": "2.2.0",
-  "description": "Bibliothèque Angular multi-fonctionnalités",
-  "author": "Imojen",
-  "license": "MIT",
-  "keywords": [
-    "angular",
-    "utils",
-    "api",
-    "http"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/imojen/ngx-data-pulse"
-  },
-  "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "esm": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
-  },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && ng-packagr -p ng-package.json",
+    "build": "ng-packagr -p projects/ngx-data-pulse/ng-package.json",
     "prepublish": "npm run build",
-    "publish": "npm publish --access public"
-  },
-  "peerDependencies": {
-    "@angular/core": ">=18.0.0",
-    "@angular/platform-browser": ">=18.0.0",
-    "@angular/router": ">=18.0.0"
+    "publish": "cd dist/ngx-data-pulse && npm publish --access public"
   },
   "devDependencies": {
     "@angular/compiler": "^18.2.13",

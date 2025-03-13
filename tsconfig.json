@@ -4,7 +4,6 @@
     "module": "ES2022",
     "moduleResolution": "node",
     "declaration": true,
-    "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -12,10 +11,11 @@
     "lib": ["ES2022", "DOM"],
     "baseUrl": ".",
     "paths": {
+      "ngx-data-pulse": ["projects/ngx-data-pulse/src/public-api.ts"],
       "@angular/*": ["./node_modules/@angular/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["projects/**/*"],
   "exclude": ["node_modules", "dist"],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
