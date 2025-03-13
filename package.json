@@ -1,6 +1,6 @@
 {
   "name": "ngx-data-pulse",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Bibliothèque Angular multi-fonctionnalités",
   "author": "Imojen",
   "license": "MIT",
@@ -26,7 +26,8 @@
     }
   },
   "scripts": {
-    "build": "npx tsc",
+    "clean": "rimraf dist",
+    "build": "npm run clean && ng-packagr -p ng-package.json",
     "prepublish": "npm run build",
     "publish": "npm publish --access public"
   },
@@ -36,10 +37,14 @@
     "@angular/router": ">=18.0.0"
   },
   "devDependencies": {
+    "@angular/compiler": "^18.2.13",
+    "@angular/compiler-cli": "^18.2.13",
     "@angular/core": "^18.0.0",
     "@angular/platform-browser": "^18.0.0",
     "@angular/router": "^18.0.0",
-    "typescript": "~5.4.0",
-    "@types/node": "^20.0.0"
+    "@types/node": "^20.0.0",
+    "ng-packagr": "^18.2.1",
+    "rimraf": "^5.0.10",
+    "typescript": "~5.4.0"
   }
 }
