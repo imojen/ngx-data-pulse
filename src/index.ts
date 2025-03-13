@@ -13,6 +13,11 @@ export * from "./navigation";
 export * from "./logs";
 export * from "./platform";
 export * from "./loader";
+export * from "./scroller";
 
 /** Pipes NgX-Data-Pulse */
 export * from "./_pipes";
+
+/** Module & Provider */
+export { NgxDataPulseModule } from "./ngx-data-pulse.module";
+export { provideNgxDataPulse } from "./ngx-data-pulse.provider";

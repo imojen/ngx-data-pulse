@@ -1,22 +1,35 @@
 {
   "name": "ngx-data-pulse",
-  "version": "2.0.0",
-  "main": "index.js",
-  "scripts": {
-    "build": "npx tsc",
-    "prepublish": "npm run build",
-    "publish": "npm publish --access public"
-  },
+  "version": "2.1.0",
+  "description": "Bibliothèque Angular multi-fonctionnalités",
+  "author": "Imojen",
+  "license": "MIT",
   "keywords": [
     "angular",
     "utils",
     "api",
     "http"
   ],
-  "type": "commonjs",
-  "description": "Bibliothèque Angular multi-fonctionnalités",
-  "author": "Imojen",
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imojen/ngx-data-pulse"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "esm": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "npx tsc",
+    "prepublish": "npm run build",
+    "publish": "npm publish --access public"
+  },
   "peerDependencies": {
     "@angular/core": ">=18.0.0",
     "@angular/platform-browser": ">=18.0.0",
