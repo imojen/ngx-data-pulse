@@ -1,9 +1,8 @@
-# NgxDataPulse
+# 🌠 NgxDataPulse
 
-[![npm version](https://badge.fury.io/js/ngx-data-pulse.svg)](https://www.npmjs.com/package/ngx-data-pulse)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Toolkit Angular 18+ pour tous types de projets.
+Boîte à outils Angular 18+ pour vous faciliter la vie dans tous types de projets.
 
 ## 📦 Installation
 
@@ -11,28 +10,28 @@ Toolkit Angular 18+ pour tous types de projets.
 npm i ngx-data-pulse
 ```
 
-## 🚀 Fonctionnalités
-
-- [API](#-api) : Service complet pour gérer les appels HTTP avec gestion de l'authentification et des erreurs.
-- [Storage](#-storage) : Service de stockage local avancé avec gestion de l'expiration et du chiffrement.
-- [Modal](#-modal) : Service de gestion des modals.
-- [Notification](#-notification) : Service de notification personnalisable.
-- [Events](#-events) : Service de gestion d'événements global avec historique.
-- [Date](#-date) : Service de manipulation de dates.
-- [Number](#-number) : Service de manipulation de nombres.
-- [Pipes](#-pipes) : Pipes pour formater des données directement dans le template (date, number, currency, etc.).
-- [Network](#-network) : Service de vérification de la connexion réseau.
-- [Idle](#-idle) : Service de détection de l'inactivité de l'utilisateur.
-- [SEO](#-seo) : Service de gestion des métadonnées SEO.
-- [Navigation](#-navigation) : Service de gestion de la navigation.
-- [Loader](#-loader) : Service de gestion des loaders personnalisés.
-- [Scroller](#-scroller) : Service de gestion du défilement.
-- [Platform](#-platform) : Service de gestion et détection de la plateforme.
-
 ## 💻 Compatibilité
 
 - Angular 18+
 - TypeScript 5.4+
+
+## 🚀 Fonctionnalités
+
+- [API](#-service-dapi) : Service complet pour gérer les appels HTTP avec gestion de l'authentification et des erreurs.
+- [Storage](#-service-de-stockage) : Service de stockage local avancé avec gestion de l'expiration et du chiffrement.
+- [Modal](#-service-modal) : Service de gestion des modals.
+- [Notification](#-service-de-notification) : Service de notification personnalisable.
+- [Events](#-service-dévénements) : Service de gestion d'événements global avec historique.
+- [Date](#-service-de-dates) : Service de manipulation de dates.
+- [Number](#-service-de-nombres) : Service de manipulation de nombres.
+- [Pipes](#-les-pipes-ngx-data-pulse) : Pipes pour formater des données directement dans le template (date, number, currency, etc.).
+- [Network](#-service-réseau) : Service de vérification de la connexion réseau.
+- [Idle](#-service-dinactivité) : Service de détection de l'inactivité de l'utilisateur.
+- [SEO](#-service-seo) : Service de gestion des métadonnées SEO.
+- [Navigation](#-service-de-navigation) : Service de gestion de la navigation.
+- [Loader](#-service-de-loader) : Service de gestion des loaders personnalisés.
+- [Scroller](#-service-de-scroll) : Service de gestion du défilement.
+- [Platform](#-service-de-plateforme) : Service de gestion et détection de la plateforme.
 
 ## 🚀 Service d'API
 
