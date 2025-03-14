@@ -48,9 +48,9 @@ export const modal = {
     const service = getModalService();
     return service.error(content, config);
   },
-  showConfirm: (content: string, config?: any) => {
+  confirm: (content: string, config?: any) => {
     const service = getModalService();
-    return service.showConfirm(content, config);
+    return service.confirm(content, config);
   },
   close: () => {
     const service = getModalService();

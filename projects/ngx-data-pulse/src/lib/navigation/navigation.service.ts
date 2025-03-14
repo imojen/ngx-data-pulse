@@ -158,7 +158,7 @@ export class NavigationService {
       if (!canNavigate) {
         if (guard.message) {
           await new Promise<void>((resolve) => {
-            this.modalService.showConfirm(guard.message!, {
+            this.modalService.confirm(guard.message!, {
               title: "Navigation bloquée",
               onConfirm: () => resolve(),
               onCancel: () => resolve(),
